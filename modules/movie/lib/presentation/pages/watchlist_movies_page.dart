@@ -16,9 +16,6 @@ class WatchlistMoviesPage extends StatefulWidget {
 
 class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
     with RouteAware {
-  String _indexValue = 'Movie';
-  List<String> _pageList = ['Movie', 'Tv Series'];
-
   @override
   void initState() {
     super.initState();
@@ -42,68 +39,38 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Watchlist'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                icon: const Icon(Icons.arrow_downward),
-                value: _indexValue,
-                elevation: 16,
-                style: TextStyle(color: Colors.white),
-                items: _pageList
-                    .map((valueItem) => DropdownMenuItem(
-                          child: Text(
-                            valueItem,
-                            style: kHeading6,
-                          ),
-                          value: valueItem,
-                        ))
-                    .toList(),
-                onChanged: (String? val) {
-                  setState(() {
-                    _indexValue = val!;
-                  });
-                },
-              ),
-            ),
+        appBar: AppBar(
+          title: Text('Watchlist'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BlocBuilder<WatchlistMoviesBloc, WatchlistMoviesState>(
+            builder: (context, state) {
+              if (state is WatchlistMoviesLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is WatchlistMoviesHasData) {
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final movie = state.result[index];
+                    return MovieCard(movie);
+                  },
+                  itemCount: state.result.length,
+                );
+              } else if (state is WatchlistMoviesError) {
+                return Center(
+                  key: Key('error_message'),
+                  child: Text(state.message),
+                );
+              } else {
+                return Container();
+              }
+            },
           ),
-        ],
-      ),
-      body: _indexValue == 'Movie'
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: BlocBuilder<WatchlistMoviesBloc, WatchlistMoviesState>(
-                builder: (context, state) {
-                  if (state is WatchlistMoviesLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (state is WatchlistMoviesHasData) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final movie = state.result[index];
-                        return MovieCard(movie);
-                      },
-                      itemCount: state.result.length,
-                    );
-                  } else if (state is WatchlistMoviesError) {
-                    return Center(
-                      key: Key('error_message'),
-                      child: Text(state.message),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-            )
-          : WatchlistTvPage(),
-    );
+        ));
   }
 
   @override

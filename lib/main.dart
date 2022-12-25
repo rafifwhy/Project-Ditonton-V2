@@ -5,7 +5,6 @@ import 'package:core/core.dart';
 import 'package:search/presentation/pages/search_tv_page.dart';
 import 'package:tvseries/presentation/pages/home_tv_page.dart';
 import 'package:tvseries/presentation/pages/watchlist_tv_page.dart';
-import 'firebase_options.dart';
 import 'injection.dart' as di;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,9 +38,6 @@ import 'package:tvseries/presentation/pages/top_rated_tv_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   await HttpSSLPinning.init();
   di.init();
   runApp(MyApp());

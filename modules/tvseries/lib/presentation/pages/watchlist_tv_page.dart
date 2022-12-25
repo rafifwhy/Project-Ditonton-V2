@@ -35,35 +35,40 @@ class _WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: BlocBuilder<TvWatchlistBloc, TvWatchlistState>(
-        builder: (context, state) {
-          if (state is TvWatchlistLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is TvWatchlistHasData) {
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final tv = state.result[index];
-                return TvCard(tv);
-              },
-              itemCount: state.result.length,
-            );
-          } else if (state is TvWatchlistError) {
-            return Center(
-              key: Key('error_message'),
-              child: Text(state.message),
-            );
-          } else {
-            return Container();
-          }
-        },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Watchlist'),
       ),
-      // ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: BlocBuilder<TvWatchlistBloc, TvWatchlistState>(
+          builder: (context, state) {
+            if (state is TvWatchlistLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is TvWatchlistHasData) {
+              return ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final tv = state.result[index];
+                  return TvCard(tv);
+                },
+                itemCount: state.result.length,
+              );
+            } else if (state is TvWatchlistError) {
+              return Center(
+                key: Key('error_message'),
+                child: Text(state.message),
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
+        // ),
+      ),
     );
   }
 
