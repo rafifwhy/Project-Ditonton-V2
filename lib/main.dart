@@ -6,7 +6,6 @@ import 'package:search/presentation/pages/search_tv_page.dart';
 import 'package:tvseries/presentation/pages/home_tv_page.dart';
 import 'package:tvseries/presentation/pages/watchlist_tv_page.dart';
 import 'injection.dart' as di;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
